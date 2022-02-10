@@ -1,58 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
+
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Phoneword
 {
-    public class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class MainPage : ContentPage
     {
-
-        Entry phoneNumberText;
-        Button translateButton;
-        Button callButton;
         string translatedNumber;
-
         public MainPage()
         {
-            this.Padding = new Thickness(20, 20, 20, 20);
-
-            StackLayout panel = new StackLayout
-            {
-                Spacing = 15                           //ustawienie kontrolek w stos
-            };
-
-            panel.Children.Add(new Label
-            {
-                Text = "Enter a Phoneword:",                                        //dodanie Label-etykiety 
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
-            });
-
-            panel.Children.Add(phoneNumberText = new Entry
-            {
-                Text = "1-855-XAMARIN",                                         //dodanie pola do danych wejsciowych-wprowadzenie tekstu  
-            });
-
-            panel.Children.Add(translateButton = new Button
-            {
-                Text = "Translate"                                             //dodanie przycisku
-            });
-
-
-
-            panel.Children.Add(callButton = new Button
-            {
-                Text = "Call",
-                IsEnabled = false,                                            //dodanie przycisku (nieaktywny)
-            });
-
-            translateButton.Clicked += OnTranslate;
-            callButton.Clicked += OnCall;                                    //wywołanie 2 funkcji zdefiniowanych niżej
-            this.Content = panel;                                            //przypisanie stosu stacklayout do Content-głownej strony.
-
-
-
+            InitializeComponent();
         }
 
         private void OnTranslate(object sender, EventArgs e)                 //funkcja tłumaczaca 
@@ -71,9 +35,10 @@ namespace Phoneword
                 callButton.Text = "Call";
             }
         }
+
         async void OnCall(object sender, System.EventArgs e)                       //funkcja odpowida za "dzwonienie"
         {
-            if (await this.DisplayAlert(                                         
+            if (await this.DisplayAlert(
                 "Dial a Number",
                 "Would you like to call " + translatedNumber + "?",
                 "Yes",
@@ -85,7 +50,7 @@ namespace Phoneword
                 }
                 catch (ArgumentNullException)
                 {
-                    await DisplayAlert("Unable to dial", "Phone number was not valid.", "OK");         
+                    await DisplayAlert("Unable to dial", "Phone number was not valid.", "OK");
                 }
                 catch (FeatureNotSupportedException)
                 {
@@ -100,6 +65,3 @@ namespace Phoneword
         }
     }
 }
-
-
-
